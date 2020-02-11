@@ -78,5 +78,5 @@ void InsertEdge(LGraph Graph,Edge E){
 
 //1.3.3 完整代码 略
 
-        /* 和之前一样 BuildGraph函数某块相同，所以函数结构层次不变。*/
+        /*  和之前一样 BuildGraph函数某块相同，所以函数结构层次不变。 */
 
