@@ -1,9 +1,12 @@
+// 图的数据结构-邻接表 -- 接口函数 -- 从标准输入流，读入一幅图  */
+
+//0.用户设置数据类型
 typedef int Vertex
 typedef int WeightType
 typedef int DataType
-//??? 如何规划变量定义的顺序
 
-// 1.1 数据结构 -- 数据结构的实现 -- 邻接表 AdjacentList
+
+//1.1 数据结构的实现 -- 邻接表 AdjacentList
 
 typedef struct Gnode* PtrToGNode; //  即PtrTpGNode 是指向结构GNode的指针
 struct GNode{
@@ -11,12 +14,11 @@ struct GNode{
     int Ne; /* 边数 */
     AdjList G ; // AdjList 是邻接表的英文缩写 G是顶点，表结点，数组||通过G[i]访问 顶点表结点
 };
-typedef PtrTOGNode LGraph // 现在 LGraph是一种指向邻接表的图结构
-
-// 重点是我们如何自定义，邻接表 它实际上 是链表“数组”，每个顶点对应一个链表
+typedef PtrTOGNode LGraph
 
 
-//1.2.1VertexNode 顶点--链表的顶点表结点 || 因为是数组，传指针参数就是传数组名，不需要PtrTpVertexNode
+
+//1.2VertexNode 顶点--链表的顶点表结点 || 因为是数组，传指针参数就是传数组名，不需要PtrTpVertexNode
 
 typedef struct VertexNode{                   /* 顶点表结点 */
 
@@ -24,7 +26,7 @@ typedef struct VertexNode{                   /* 顶点表结点 */
     EdgeNode FirstEdge;                 /* 指针域 -- 指向一个边表结点*/
 }VertexNode,AdjList[MaxVertexNum=Nv];
 
-//1.2.2EdgeNode 边-- 边，表结点 并没有使用指针来代替结点
+//1.3EdgeNode   边-- 边表结点 并没有使用指针来代替结点
 
 
 typedef struct EdgeNode{
@@ -35,7 +37,10 @@ typedef struct EdgeNode{
 
 
 
-//1.3.1 初始化图
+//2.1 接口函数 -- CreatGraph -- 创建无边图,并设置顶点数据
+
+        /* 也可以像之前把SetVertexData单独封装成一个函数  */
+
 LGraph CreatGraph(int VertexNum){
     Vertex V,W;
     LGraph Graph;
@@ -50,8 +55,8 @@ LGraph CreatGraph(int VertexNum){
     return Graph
 }
 
-//1.3.2 插入EdgeNode
-//1.3.2.1打包边数据
+
+//2.2 接口函数 -- InsertEdge -- 插入边
 typedef struct Edge* PtrToEdge;
 struct Edge {
     Vertex V ;
@@ -70,6 +75,8 @@ void InsertEdge(LGraph Graph,Edge E){
     Graph->G[E->V]->Next=NewEdgeNode;
 }
 
-//1.3.3 完整代码 省略
 
-// 和之前一样 得益于封装的思想，即使内部细节变化，不影响外部输入，不会破坏代码结构
+//1.3.3 完整代码 略
+
+        /* 和之前一样 BuildGraph函数某块相同，所以函数结构层次不变。*/
+

@@ -1,10 +1,10 @@
-/* 数据结构 -- 数据结构的实现 -- 邻接矩阵 */
-
+/* 图的数据结构-邻接矩阵 -- 接口函数 -- 从标准输入流，读入一幅图  */
+//0.用户设置数据类型
 typedef int Vertex
 typedef int WeightType
 typedef int DataType
 
-//1.1 图的数据结构
+//1. 数据结构的实现 -- 邻接矩阵
 typedef struct Gnode *PtrTOGNode;            // 很聪明的通过typedef制造出一个指针类
 struct GNode{
     int Nv; /* 顶点数 */
@@ -14,7 +14,7 @@ struct GNode{
 };
 typedef PtrTOGNode MGraph                    // MGraph是指向使用邻接矩阵的图结构
 
-// 2.1 数据结构 -- 初始化
+// 2.1 接口函数 -- CreatGraph -- 创建无边图
 typedef int Vertex
 MGraph CreatGraph (int VertexNum){
     Vertex V , W ;
@@ -28,7 +28,7 @@ MGraph CreatGraph (int VertexNum){
      */
     Graph -> Nv = VertexNum ; /*Graphs->为何是一个GNode对象 -- malloc强制类型转换，告诉编译器申请的内存存放变量的类型，因而对应的
                               Graph指针指向一个MGraph指针应该指向的对象-GNode*/
-                              //一句话：malloc申请了对象需要的空间，类型转换创建了空间容纳的对象。
+                              //一句话：malloc申请了对象需要的空间，类型转换声明了空间容纳的对象。
     Graph -> Ne = 0 ;
 
     for (V=0; V<Graph->Nv; V++){
@@ -39,7 +39,39 @@ MGraph CreatGraph (int VertexNum){
 
     return Graph;
 }
-// 2.2 数据结构 -- 插入边
+
+
+
+//2.2 接口函数 -- SetVertexData -- 设置顶点数据
+
+
+//2.2.1 顶点类型
+typedef struct VertexNode* PtrToVertexNode;//为什么将函数的输入，额外定义一个数据结构
+/*
+ *
+ *  输入数据的结构定义使得：输入的规范使得函数可以成为一个“黑盒” .
+ *  从C的函数传参开始，我们就有了传值而不是传变量的“规范”。
+ *  因为变量是数据的载体。
+ *  为了调用函数，所接受的上一层变量的数据，必须被加工为新的变量
+ *  于是每一层相同的数据有两个不同的变量载体，一个是上一层传入符合这一层的变量，一个是传入下一层符合下一层规范的变量
+ *  即每一层都有只属于自己的变量，这是分层(解耦合)的基础，
+ *
+ * */
+struct VertexNode{
+    Vertex vertex;
+    DataType value;
+};
+typedef PtrToVertexNode VertexNode;
+
+
+//2.2.2 接口函数 -- SetVertexData -- 导入顶点数据
+void SetVertexDData(MGraph Graph,VertexNode vertexNode){
+    Graph->Date[vertexNode->vertex]=vertexNode->value;
+}
+
+
+//2.3 接口函数 -- InsertEdge -- 插入边
+
 typedef struct ENode *PtrToENode
 struct ENode {
     Vertex V ;
@@ -52,27 +84,32 @@ void InsertEdge(MGraph Graph,Edge E){
     Graph->G[E->V][E->W]=E->weight
 }
 
-// 全部函数
+// 3.从标准输入流，读入一幅图
 vold BuildGraph(){
     int Nv ;
     Vertex V ;
     MGraph Graph ;
-    Edge E ;
+    Edge E ; VertexNode vertexNode;
     scanf("%d",&Nv);
     Graph = CreatGraph(Nv);
     scanf("%d",&Graph->Ne);
     if( Graph->Ne != 0){
-        /* 读入边 */
         E = (Edge)malloc(sizeof(struct Edge)) ;
-        for ( i = 0; i < Graph->Nv; ++i) {
+        for ( int i = 0; i < Graph->Nv; ++i) {
+            /* 从标准输入流读入边 */
             scanf("%d %d %d",&E->V,&E->W,&E->weight);
+            /* 插入边*/
             InsertEdge(Graph,E);
 
         }
     }
-    /* 读入顶点数据 */
-    for (int V = 0; V <Graph->Nv ; ++V) {
-        scanf("%d",&Graph->Data[V]);
+
+    vertexNode = (VertexNode)malloc(sizeof(struct VertexNode));
+    for ( i = 0; i <Graph->Nv ; ++i) {
+        /* 从标准输入流读入顶点数据 */
+        scanf("%d %d",&vertexNode->vertex,&vertexNode->value);
+        /* 设置顶点数据*/
+        SetVertexDData(Graph,vertexNode);
     }
     return Graph;
 }
