@@ -14,8 +14,11 @@ struct GNode{
 };
 typedef PtrTOGNode MGraph                    // MGraph是指向使用邻接矩阵的图结构
 
-// 2.1 接口函数 -- CreatGraph -- 创建无边图
+// 2.1 接口函数 -- CreatGraph -- 创建无边图 
 typedef int Vertex
+
+//创造一个数组需要 从heap申请对象的空间(malloc),规划内部空间(声明),以及初始化空间。
+
 MGraph CreatGraph (int VertexNum){
     Vertex V , W ;
     MGraph Graph ;
@@ -43,17 +46,12 @@ MGraph CreatGraph (int VertexNum){
 
 
 //2.2.1 顶点类型
-typedef struct VertexNode* PtrToVertexNode;//为什么将函数的输入，额外定义一个数据结构
-/*
- *
- *  输入数据的结构定义使得：输入的规范使得函数可以成为一个“黑盒” .
- *  从C的函数传参开始，我们就有了传值而不是传变量的“规范”。
- *  因为变量是数据的载体。
- *  为了调用函数，所接受的上一层变量的数据，必须被加工为新的变量
- *  于是每一层相同的数据有两个不同的变量载体，一个是上一层传入符合这一层的变量，一个是传入下一层符合下一层规范的变量
- *  即每一层都有只属于自己的变量，这是分层(解耦合)的基础，
- *
- * */
+/* 为什么将函数的输入，额外定义一个数据结构
+   从C的函数传参开始，我们就有了传值而不是传变量的“规范”。
+   因为 任何程序的实现都是分层的，不同的层实现不同的作用，需要不同的变量。(接口不同)
+   每一层都使用接口规范定义的变量，就像java的私有变量。
+*/
+typedef struct VertexNode* PtrToVertexNode;
 struct VertexNode{
     Vertex vertex;
     DataType value;
@@ -81,8 +79,9 @@ void InsertEdge(MGraph Graph,Edge E){
     Graph->G[E->V][E->W]=E->weight
 }
 
-// 3.从标准输入流，读入一幅图
-vold BuildGraph(){
+// 3.从标准输入流，读入一幅图  分两层 
+// 数据读入层(标准数据流-->VertexNode/ENode)||  建立图 creat(Nv) setVertexDate(VerexNode) insertEdge(Edge)
+ vold BuildGraph(){
     int Nv ;
     Vertex V ;
     MGraph Graph ;
@@ -100,7 +99,7 @@ vold BuildGraph(){
 
         }
     }
-
+////////////////////////////////////////////////////////////////////////////////
     vertexNode = (VertexNode)malloc(sizeof(struct VertexNode));
     for ( i = 0; i <Graph->Nv ; ++i) {
         /* 从标准输入流读入顶点数据 */
