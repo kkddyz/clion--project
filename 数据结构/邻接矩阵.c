@@ -22,13 +22,10 @@ MGraph CreatGraph (int VertexNum){
 
     Graph = (MGraph)malloc(sizeof(struct GNode)) //为什么需要强制类型转换？？
     /*
-     指针的类型不是它的类型，而是他指向内存的类型。malloc返回某块内存的首地址，其类型是void。
-     内存类型决定内存的使用方式，int* 就会用4字节存放数据
-     既然这块内存用来存放一个GNode类型的数据，那么这块内存的类型自然应该是GNode.
+     malloc的空间默认当作char数组使用。
+     一旦你申明结构类型(告诉编译器如何划分内存)，那么一个变量就被“创造出来了”
      */
-    Graph -> Nv = VertexNum ; /*Graphs->为何是一个GNode对象 -- malloc强制类型转换，告诉编译器申请的内存存放变量的类型，因而对应的
-                              Graph指针指向一个MGraph指针应该指向的对象-GNode*/
-                              //一句话：malloc申请了对象需要的空间，类型转换声明了空间容纳的对象。
+    Graph -> Nv = VertexNum ; //当你声明数据解构的类型后，编译器自然会安排哪里放Nv 哪里放Ne
     Graph -> Ne = 0 ;
 
     for (V=0; V<Graph->Nv; V++){
